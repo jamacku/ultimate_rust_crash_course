@@ -10,7 +10,7 @@ fn main() {
     ready = READY_AMOUNT;
     */
 
-    let (missiles, ready) = (STARTING_MISSILES, READY_AMOUNT);
+    let (missiles, ready): (i32, i32) = (STARTING_MISSILES, READY_AMOUNT);
 
     println!("Firing {} of my {} missiles...", ready, missiles);
     println!("{} missiles left", missiles - ready);
