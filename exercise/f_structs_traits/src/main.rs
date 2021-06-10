@@ -61,6 +61,9 @@ fn main() {
     
     bunny_nibbles(&mut carrot);
     println!("Bunny nibbles for awhile: {:?}", carrot);
+
+    bunny_nibbles(&mut grapes);
+    println!("Bunny nibbles for awhile: {:?}", grapes);
 }
 
 #[derive(Debug)] // This enables using the debugging format string "{:?}"
@@ -73,4 +76,13 @@ impl Bite for Carrot {
         // Eat 20% of the remaining carrot. It may take awhile to eat it all...
         self.percent_left *= 0.8;
     }
+}
+
+#[warn(unused_variables)]
+fn bunny_nibbles<T: Bite> (item: &mut T) {
+    let mut index: i32 = 100;
+    while index > 0 {
+        item.bite();
+        index -= 1;
+    } 
 }
