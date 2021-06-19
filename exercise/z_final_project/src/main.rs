@@ -27,6 +27,7 @@
 
 const DEFAULT_BLUR_VALUE: f32 = 2.0;
 const DEFAULT_BRIGHTEN_VALUE: i32 = 2;
+const DEFAULT_CROP_VALUE: (u32, u32, u32, u32) = (5, 5, 5, 5);
 
 /**
  * Main function
@@ -95,10 +96,34 @@ fn main() {
             brighten(infile, outfile, brighten_value);
         },
 
-        // **OPTION**
-        // Crop -- see the crop() function below
+        // Crop option handler
+        // TODO: use nicer aproach to parse x y width and height
         "crop" => {
-            // crop();
+            let (infile, outfile): (String, String);
+            let mut crop_value: Vec<u32> = Vec::new();
+
+            if args.len() < 2 {
+                print_usage_and_exit();
+            }
+
+            infile = args.remove(0);
+            outfile = args.remove(0);
+
+            if args.len() >= 4 {
+                for i in 0..4 {
+                    crop_value.push(args.remove(0).parse().unwrap());
+                }
+            } else {
+                crop_value = vec!(
+                    DEFAULT_CROP_VALUE.0, 
+                    DEFAULT_CROP_VALUE.1, 
+                    DEFAULT_CROP_VALUE.2, 
+                    DEFAULT_CROP_VALUE.3
+                );
+                println!("uses default crop value: {:?}!", crop_value);
+            }
+
+            crop(infile, outfile, crop_value);
         },
 
         // **OPTION**
@@ -181,16 +206,24 @@ fn brighten(infile: String, outfile: String, value: i32) {
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
-fn crop(infile: String, outfile: String) {
-    // See blur() for an example of how to open an image.
-
-    // .crop() takes four arguments: x: u32, y: u32, width: u32, height: u32
-    // You may hard-code them, if you like.  It returns a new image.
-
-    // ! Challenge: parse the four values from the command-line and pass them
-    // ! through to this function.
-
-    // See blur() for an example of how to save the image.
+/**
+ * Function for cropping pictures
+ */
+fn crop(infile: String, outfile: String, coordinates: Vec<u32>) {
+    let (mut img, img2): (image::DynamicImage, image::DynamicImage);
+    let (x, y, width, height): (u32, u32, u32, u32) = (
+        coordinates[0], 
+        coordinates[1], 
+        coordinates[2], 
+        coordinates[3]
+    );
+    
+    // Here's how you open an existing image file
+    img = image::open(infile).expect("Failed to open INFILE.");
+    img2 = img.crop(x, y, width, height);
+    
+    // Here's how you save an image to a file.
+    img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
 fn rotate(infile: String, outfile: String) {
