@@ -18,7 +18,7 @@
 //
 // For example:
 //
-//     cargo run --release blur image.png blurred.png
+// !   cargo run --release blur image.png blurred.png
 //
 // ? NOTE 2: This is how you parse a number from a string (or crash with a
 // message). It works with any integer or float type.
@@ -34,9 +34,11 @@ fn main() {
     // ! Challenge: If you're feeling really ambitious, you could delete this code
     // and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
     let mut args: Vec<String> = std::env::args().skip(1).collect();
+
     if args.is_empty() {
         print_usage_and_exit();
     }
+    
     let subcommand = args.remove(0);
     match subcommand.as_str() {
         // EXAMPLE FOR CONVERSION OPERATIONS
@@ -44,27 +46,43 @@ fn main() {
             if args.len() != 2 {
                 print_usage_and_exit();
             }
+
             let infile = args.remove(0);
             let outfile = args.remove(0);
-            // **OPTION**
-            // Improve the blur implementation -- see the blur() function below
-            blur(infile, outfile);
+            let blur_value = args.remove(0).parse().unwrap();
+
+            blur(infile, outfile, blur_value);
         },
 
         // **OPTION**
         // Brighten -- see the brighten() function below
+        "brighten" => {
+            brighten();
+        },
 
         // **OPTION**
         // Crop -- see the crop() function below
+        "crop" => {
+            crop();
+        },
 
         // **OPTION**
         // Rotate -- see the rotate() function below
+        "rotate" => {
+            rotate();
+        },
 
         // **OPTION**
         // Invert -- see the invert() function below
+        "intert" => {
+            invert();
+        },
 
         // **OPTION**
         // Grayscale -- see the grayscale() function below
+        "grayscale" => {
+            grayscale();
+        },
 
         // A VERY DIFFERENT EXAMPLE...a really fun one. :-)
         "fractal" => {
@@ -77,6 +95,9 @@ fn main() {
 
         // **OPTION**
         // Generate -- see the generate() function below -- this should be sort of like "fractal()"!
+        "generate" => {
+            generate();
+        }
 
         // For everything else...
         _ => {
@@ -94,13 +115,12 @@ fn print_usage_and_exit() {
     std::process::exit(-1);
 }
 
-fn blur(infile: String, outfile: String) {
+fn blur(infile: String, outfile: String, value: f32) {
     // Here's how you open an existing image file
     let img = image::open(infile).expect("Failed to open INFILE.");
-    // **OPTION**
-    // Parse the blur amount (an f32) from the command-line and pass it through
-    // to this function, instead of hard-coding it to 2.0.
-    let img2 = img.blur(2.0);
+    
+    let img2 = img.blur(value);
+
     // Here's how you save an image to a file.
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
