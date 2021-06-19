@@ -36,7 +36,8 @@ fn main() {
     //
     // ! Challenge: If you're feeling really ambitious, you could delete this code
     // ! and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
-    // TODO use "clap" library!
+    // TODO: use "clap" library!
+    // TODO: improve cornercase error handeling + msgs
     let mut args: Vec<String>;
     let subcommand: String;
 
