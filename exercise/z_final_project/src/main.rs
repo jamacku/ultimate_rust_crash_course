@@ -11,7 +11,7 @@
 //
 // Documentation for the image library is here: https://docs.rs/image/0.21.0/image/
 //
-// NOTE 1: Image processing is very CPU-intensive.  Your program will run *noticeably* faster if you
+// ? NOTE 1: Image processing is very CPU-intensive.  Your program will run *noticeably* faster if you
 // run it with the `--release` flag.
 //
 //     cargo run --release [ARG1 [ARG2]]
@@ -20,7 +20,7 @@
 //
 //     cargo run --release blur image.png blurred.png
 //
-// NOTE 2: This is how you parse a number from a string (or crash with a
+// ? NOTE 2: This is how you parse a number from a string (or crash with a
 // message). It works with any integer or float type.
 //
 //     let positive_number: u32 = some_string.parse().expect("Failed to parse a number");
@@ -31,7 +31,7 @@ fn main() {
     // so you can make your program do different things.  Here's a little bit
     // to get you started doing manual parsing.
     //
-    // Challenge: If you're feeling really ambitious, you could delete this code
+    // ! Challenge: If you're feeling really ambitious, you could delete this code
     // and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
     let mut args: Vec<String> = std::env::args().skip(1).collect();
     if args.is_empty() {
@@ -111,7 +111,7 @@ fn brighten(infile: String, outfile: String) {
     // .brighten() takes one argument, an i32.  Positive numbers brighten the
     // image. Negative numbers darken it.  It returns a new image.
 
-    // Challenge: parse the brightness amount from the command-line and pass it
+    // ! Challenge: parse the brightness amount from the command-line and pass it
     // through to this function.
 }
 
@@ -121,7 +121,7 @@ fn crop(infile: String, outfile: String) {
     // .crop() takes four arguments: x: u32, y: u32, width: u32, height: u32
     // You may hard-code them, if you like.  It returns a new image.
 
-    // Challenge: parse the four values from the command-line and pass them
+    // ! Challenge: parse the four values from the command-line and pass them
     // through to this function.
 
     // See blur() for an example of how to save the image.
@@ -136,7 +136,7 @@ fn rotate(infile: String, outfile: String) {
     //   .rotate270()
     // All three methods return a new image.  Pick one and use it!
 
-    // Challenge: parse the rotation amount from the command-line, pass it
+    // ! Challenge: parse the rotation amount from the command-line, pass it
     // through to this function to select which method to call.
 
     // See blur() for an example of how to save the image.
@@ -168,10 +168,10 @@ fn generate(outfile: String) {
 
     // Set the image to some solid color. -- see fractal() for an example
 
-    // Challenge: parse some color data from the command-line, pass it through
+    // ! Challenge: parse some color data from the command-line, pass it through
     // to this function to use for the solid color.
 
-    // Challenge 2: Generate something more interesting!
+    // ! Challenge 2: Generate something more interesting!
 
     // See blur() for an example of how to save the image
 }
