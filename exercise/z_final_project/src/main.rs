@@ -25,6 +25,8 @@
 //
 //     let positive_number: u32 = some_string.parse().expect("Failed to parse a number");
 
+const DEFAULT_BLUR_VALUE: f32 = 2.0;
+
 
 fn main() {
     // 1. First, you need to implement some basic command-line argument handling
@@ -33,23 +35,34 @@ fn main() {
     //
     // ! Challenge: If you're feeling really ambitious, you could delete this code
     // and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
-    let mut args: Vec<String> = std::env::args().skip(1).collect();
+    let mut args: Vec<String>;
+    let subcommand: String;
+
+    args = std::env::args().skip(1).collect();
 
     if args.is_empty() {
         print_usage_and_exit();
     }
     
-    let subcommand = args.remove(0);
+    subcommand = args.remove(0);
     match subcommand.as_str() {
-        // EXAMPLE FOR CONVERSION OPERATIONS
+        // Blur option handler
         "blur" => {
-            if args.len() != 2 {
+            let (infile, outfile): (String, String);
+            let blur_value: f32;
+
+            if args.len() < 2 {
                 print_usage_and_exit();
             }
 
-            let infile = args.remove(0);
-            let outfile = args.remove(0);
-            let blur_value = args.remove(0).parse().unwrap();
+            infile = args.remove(0);
+            outfile = args.remove(0);
+
+            if args.len() > 1 {
+                blur_value = args.remove(0).parse().unwrap();
+            } else {
+                blur_value = DEFAULT_BLUR_VALUE;
+            }
 
             blur(infile, outfile, blur_value);
         },
@@ -57,31 +70,31 @@ fn main() {
         // **OPTION**
         // Brighten -- see the brighten() function below
         "brighten" => {
-            brighten();
+            // brighten();
         },
 
         // **OPTION**
         // Crop -- see the crop() function below
         "crop" => {
-            crop();
+            // crop();
         },
 
         // **OPTION**
         // Rotate -- see the rotate() function below
         "rotate" => {
-            rotate();
+            // rotate();
         },
 
         // **OPTION**
         // Invert -- see the invert() function below
         "intert" => {
-            invert();
+            // invert();
         },
 
         // **OPTION**
         // Grayscale -- see the grayscale() function below
         "grayscale" => {
-            grayscale();
+            // grayscale();
         },
 
         // A VERY DIFFERENT EXAMPLE...a really fun one. :-)
@@ -96,7 +109,7 @@ fn main() {
         // **OPTION**
         // Generate -- see the generate() function below -- this should be sort of like "fractal()"!
         "generate" => {
-            generate();
+            // generate();
         }
 
         // For everything else...
@@ -117,9 +130,10 @@ fn print_usage_and_exit() {
 
 fn blur(infile: String, outfile: String, value: f32) {
     // Here's how you open an existing image file
-    let img = image::open(infile).expect("Failed to open INFILE.");
+    let (img, img2): (image::DynamicImage, image::DynamicImage);
     
-    let img2 = img.blur(value);
+    img = image::open(infile).expect("Failed to open INFILE.");
+    img2 = img.blur(value);
 
     // Here's how you save an image to a file.
     img2.save(outfile).expect("Failed writing OUTFILE.");
