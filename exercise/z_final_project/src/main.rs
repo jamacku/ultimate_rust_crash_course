@@ -28,7 +28,9 @@
 const DEFAULT_BLUR_VALUE: f32 = 2.0;
 const DEFAULT_BRIGHTEN_VALUE: i32 = 2;
 
-
+/**
+ * Main function
+ */
 fn main() {
     // 1. First, you need to implement some basic command-line argument handling
     // so you can make your program do different things.  Here's a little bit
@@ -139,6 +141,9 @@ fn main() {
     }
 }
 
+/**
+ * Function for printing usage messages
+ */
 fn print_usage_and_exit() {
     println!("USAGE (when in doubt, use a .png extension on your filenames)");
     println!("blur INFILE OUTFILE");
@@ -148,10 +153,13 @@ fn print_usage_and_exit() {
     std::process::exit(-1);
 }
 
+/**
+ * Function for bluring pictures
+ */
 fn blur(infile: String, outfile: String, value: f32) {
-    // Here's how you open an existing image file
     let (img, img2): (image::DynamicImage, image::DynamicImage);
     
+    // Here's how you open an existing image file
     img = image::open(infile).expect("Failed to open INFILE.");
     img2 = img.blur(value);
 
@@ -159,19 +167,17 @@ fn blur(infile: String, outfile: String, value: f32) {
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
+/**
+ * Function for brightening pictures
+ */
 fn brighten(infile: String, outfile: String, value: i32) {
-    // See blur() for an example of how to open / save an image.
-
-    // .brighten() takes one argument, an i32.  Positive numbers brighten the
-    // image. Negative numbers darken it.  It returns a new image.
-
-    // ! Challenge: parse the brightness amount from the command-line and pass it
-    // ! through to this function.
     let (img, img2): (image::DynamicImage, image::DynamicImage);
     
+    // Here's how you open an existing image file
     img = image::open(infile).expect("Failed to open INFILE.");
     img2 = img.brighten(value);
     
+    // Here's how you save an image to a file.
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
