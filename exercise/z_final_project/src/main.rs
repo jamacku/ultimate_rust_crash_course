@@ -12,7 +12,7 @@
 // Documentation for the image library is here: https://docs.rs/image/0.21.0/image/
 //
 // ? NOTE 1: Image processing is very CPU-intensive.  Your program will run *noticeably* faster if you
-// run it with the `--release` flag.
+// ? run it with the `--release` flag.
 //
 //     cargo run --release [ARG1 [ARG2]]
 //
@@ -21,11 +21,12 @@
 // !   cargo run --release blur image.png blurred.png
 //
 // ? NOTE 2: This is how you parse a number from a string (or crash with a
-// message). It works with any integer or float type.
+// ? message). It works with any integer or float type.
 //
 //     let positive_number: u32 = some_string.parse().expect("Failed to parse a number");
 
 const DEFAULT_BLUR_VALUE: f32 = 2.0;
+const DEFAULT_BRIGHTEN_VALUE: i32 = 2;
 
 
 fn main() {
@@ -34,7 +35,8 @@ fn main() {
     // to get you started doing manual parsing.
     //
     // ! Challenge: If you're feeling really ambitious, you could delete this code
-    // and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
+    // ! and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
+    // TODO use "clap" library!
     let mut args: Vec<String>;
     let subcommand: String;
 
@@ -62,16 +64,32 @@ fn main() {
                 blur_value = args.remove(0).parse().unwrap();
             } else {
                 blur_value = DEFAULT_BLUR_VALUE;
-                println!("uses default blure value!");
+                println!("uses default blure value: {}!", DEFAULT_BLUR_VALUE);
             }
 
             blur(infile, outfile, blur_value);
         },
 
-        // **OPTION**
-        // Brighten -- see the brighten() function below
+        // Brighten option handler
         "brighten" => {
-            // brighten();
+            let (infile, outfile): (String, String);
+            let brighten_value: i32;
+
+            if args.len() < 2 {
+                print_usage_and_exit();
+            }
+
+            infile = args.remove(0);
+            outfile = args.remove(0);
+
+            if args.len() >= 1 {
+                brighten_value = args.remove(0).parse().unwrap();
+            } else {
+                brighten_value = DEFAULT_BRIGHTEN_VALUE;
+                println!("uses default brighten value: {}!", DEFAULT_BRIGHTEN_VALUE);
+            }
+
+            brighten(infile, outfile, brighten_value);
         },
 
         // **OPTION**
@@ -140,14 +158,20 @@ fn blur(infile: String, outfile: String, value: f32) {
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
-fn brighten(infile: String, outfile: String) {
+fn brighten(infile: String, outfile: String, value: i32) {
     // See blur() for an example of how to open / save an image.
 
     // .brighten() takes one argument, an i32.  Positive numbers brighten the
     // image. Negative numbers darken it.  It returns a new image.
 
     // ! Challenge: parse the brightness amount from the command-line and pass it
-    // through to this function.
+    // ! through to this function.
+    let (img, img2): (image::DynamicImage, image::DynamicImage);
+    
+    img = image::open(infile).expect("Failed to open INFILE.");
+    img2 = img.brighten(value);
+    
+    img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
 fn crop(infile: String, outfile: String) {
@@ -157,7 +181,7 @@ fn crop(infile: String, outfile: String) {
     // You may hard-code them, if you like.  It returns a new image.
 
     // ! Challenge: parse the four values from the command-line and pass them
-    // through to this function.
+    // ! through to this function.
 
     // See blur() for an example of how to save the image.
 }
@@ -172,7 +196,7 @@ fn rotate(infile: String, outfile: String) {
     // All three methods return a new image.  Pick one and use it!
 
     // ! Challenge: parse the rotation amount from the command-line, pass it
-    // through to this function to select which method to call.
+    // ! through to this function to select which method to call.
 
     // See blur() for an example of how to save the image.
 }
@@ -204,7 +228,7 @@ fn generate(outfile: String) {
     // Set the image to some solid color. -- see fractal() for an example
 
     // ! Challenge: parse some color data from the command-line, pass it through
-    // to this function to use for the solid color.
+    // ! to this function to use for the solid color.
 
     // ! Challenge 2: Generate something more interesting!
 
