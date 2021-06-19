@@ -58,10 +58,11 @@ fn main() {
             infile = args.remove(0);
             outfile = args.remove(0);
 
-            if args.len() > 1 {
+            if args.len() >= 1 {
                 blur_value = args.remove(0).parse().unwrap();
             } else {
                 blur_value = DEFAULT_BLUR_VALUE;
+                println!("uses default blure value!");
             }
 
             blur(infile, outfile, blur_value);
