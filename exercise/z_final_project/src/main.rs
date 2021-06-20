@@ -28,6 +28,7 @@
 const DEFAULT_BLUR_VALUE: f32 = 2.0;
 const DEFAULT_BRIGHTEN_VALUE: i32 = 2;
 const DEFAULT_CROP_VALUE: (u32, u32, u32, u32) = (5, 5, 5, 5);
+const DEFAULT_ROTATE_VALUE: u32 = 90;
 
 /**
  * Main function
@@ -129,7 +130,32 @@ fn main() {
         // **OPTION**
         // Rotate -- see the rotate() function below
         "rotate" => {
-            // rotate();
+            let (infile, outfile): (String, String);
+            let rotate_value: u32;
+
+            if args.len() < 2 {
+                print_usage_and_exit();
+            }
+
+            infile = args.remove(0);
+            outfile = args.remove(0);
+
+            if args.len() >= 1 {
+                rotate_value = match args.remove(0).parse().unwrap() {
+                    270 => 270,
+                    180 => 180,
+                    90 => 90,
+                    _ => {
+                        println!("uses default brighten value: {}!", DEFAULT_BRIGHTEN_VALUE);
+                        DEFAULT_ROTATE_VALUE
+                    },
+                };
+            } else {
+                rotate_value = DEFAULT_ROTATE_VALUE;
+                println!("uses default brighten value: {}!", DEFAULT_BRIGHTEN_VALUE);
+            }
+
+            rotate(infile, outfile, rotate_value);
         },
 
         // **OPTION**
@@ -226,19 +252,22 @@ fn crop(infile: String, outfile: String, coordinates: Vec<u32>) {
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
-fn rotate(infile: String, outfile: String) {
-    // See blur() for an example of how to open an image.
-
-    // There are 3 rotate functions to choose from (all clockwise):
-    //   .rotate90()
-    //   .rotate180()
-    //   .rotate270()
-    // All three methods return a new image.  Pick one and use it!
-
-    // ! Challenge: parse the rotation amount from the command-line, pass it
-    // ! through to this function to select which method to call.
-
-    // See blur() for an example of how to save the image.
+/**
+ * Function for rotating pictures
+ */
+fn rotate(infile: String, outfile: String, value: u32) {
+    let (img, img2): (image::DynamicImage, image::DynamicImage);
+    
+    // Here's how you open an existing image file
+    img = image::open(infile).expect("Failed to open INFILE.");
+    img2 = match value {
+        270 => img.rotate270(),
+        180 => img.rotate180(),
+        _ => img.rotate90(),
+    };
+    
+    // Here's how you save an image to a file.
+    img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
 
