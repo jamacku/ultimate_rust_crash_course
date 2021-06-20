@@ -158,10 +158,18 @@ fn main() {
             rotate(infile, outfile, rotate_value);
         },
 
-        // **OPTION**
-        // Invert -- see the invert() function below
-        "intert" => {
-            // invert();
+        // Invert option handler
+        "invert" => {
+            let (infile, outfile): (String, String);
+
+            if args.len() < 2 {
+                print_usage_and_exit();
+            }
+
+            infile = args.remove(0);
+            outfile = args.remove(0);
+
+            invert(infile, outfile);
         },
 
         // **OPTION**
@@ -278,6 +286,14 @@ fn invert(infile: String, outfile: String) {
     // will use the same image to save out to a different file.
 
     // See blur() for an example of how to save the image.
+    let mut img: image::DynamicImage;
+    
+    // Here's how you open an existing image file
+    img = image::open(infile).expect("Failed to open INFILE.");
+    img.invert();
+
+    // Here's how you save an image to a file.
+    img.save(outfile).expect("Failed writing OUTFILE.");
 }
 
 fn grayscale(infile: String, outfile: String) {
