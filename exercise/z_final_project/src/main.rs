@@ -25,10 +25,13 @@
 //
 //     let positive_number: u32 = some_string.parse().expect("Failed to parse a number");
 
+use rand::Rng;
+
 const DEFAULT_BLUR_VALUE: f32 = 2.0;
 const DEFAULT_BRIGHTEN_VALUE: i32 = 2;
 const DEFAULT_CROP_VALUE: (u32, u32, u32, u32) = (5, 5, 5, 5);
 const DEFAULT_ROTATE_VALUE: u32 = 90;
+const DEFAULT_GENERATE_VALUE: u8 = 10;
 
 /**
  * Main function
@@ -111,7 +114,7 @@ fn main() {
             outfile = args.remove(0);
 
             if args.len() >= 4 {
-                for i in 0..4 {
+                for _i in 0..4 {
                     crop_value.push(args.remove(0).parse().unwrap());
                 }
             } else {
@@ -186,19 +189,37 @@ fn main() {
             grayscale(infile, outfile);
         },
 
-        // A VERY DIFFERENT EXAMPLE...a really fun one. :-)
+        // Fractal option handler
         "fractal" => {
+            let outfile: String;
+
             if args.len() != 1 {
                 print_usage_and_exit();
             }
-            let outfile = args.remove(0);
+
+            outfile = args.remove(0);
             fractal(outfile);
         }
 
-        // **OPTION**
-        // Generate -- see the generate() function below -- this should be sort of like "fractal()"!
+        // Generate option handler
         "generate" => {
-            // generate();
+            let outfile: String;
+            let color: u8;
+
+            if args.len() < 1 {
+                print_usage_and_exit();
+            }
+
+            outfile = args.remove(0);
+
+            color = if args.len() >= 1 {
+                args.remove(0).parse().unwrap()
+            } else {
+                println!("uses default generate value: {}!", DEFAULT_GENERATE_VALUE);
+                DEFAULT_GENERATE_VALUE
+            };
+
+            generate(outfile, color);
         }
 
         // For everything else...
@@ -314,25 +335,39 @@ fn grayscale(infile: String, outfile: String) {
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
-fn generate(outfile: String) {
-    // Create an ImageBuffer -- see fractal() for an example
+fn generate(outfile: String, color: u8) {
+    let width: u32 = 800;
+    let height: u32 = 800;
 
-    // Iterate over the coordinates and pixels of the image -- see fractal() for an example
+    let mut imgbuf = image::ImageBuffer::new(width, height);
 
-    // Set the image to some solid color. -- see fractal() for an example
+    // Iterate over the coordinates and pixels of the image
+    for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
+        // Use red and blue to be a pretty gradient background
+        let red: u8 = (color as f32 * 0.3) as u8 * (0.2 * x as f32) as u8;
+        let blue: u8 = (color as f32 * 0.3) as u8 * (0.3 * x as f32) as u8;
 
-    // ! Challenge: parse some color data from the command-line, pass it through
-    // ! to this function to use for the solid color.
+        // Just some stupid stuff :D
+        let green: u8;
+        let mut rng = rand::thread_rng();
+        green = if x % 3 == 0 && y % 3 > 0 {
+            rng.gen::<u8>()
+        } else {
+            125
+        };
 
-    // ! Challenge 2: Generate something more interesting!
+        // Actually set the pixel. red, green, and blue are u8 values!
+        *pixel = image::Rgb([red, green, blue]);
+    }
 
-    // See blur() for an example of how to save the image
+    // Here's how you save an image to a file.
+    imgbuf.save(outfile).unwrap();
 }
 
 // This code was adapted from https://github.com/PistonDevelopers/image
 fn fractal(outfile: String) {
-    let width = 800;
-    let height = 800;
+    let width: u32 = 800;
+    let height: u32 = 800;
 
     let mut imgbuf = image::ImageBuffer::new(width, height);
 
