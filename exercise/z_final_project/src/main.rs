@@ -146,13 +146,13 @@ fn main() {
                     180 => 180,
                     90 => 90,
                     _ => {
-                        println!("uses default brighten value: {}!", DEFAULT_BRIGHTEN_VALUE);
+                        println!("uses default rotate value: {}°!", DEFAULT_ROTATE_VALUE);
                         DEFAULT_ROTATE_VALUE
                     },
                 };
             } else {
                 rotate_value = DEFAULT_ROTATE_VALUE;
-                println!("uses default brighten value: {}!", DEFAULT_BRIGHTEN_VALUE);
+                println!("uses default brighten value: {}°!", DEFAULT_ROTATE_VALUE);
             }
 
             rotate(infile, outfile, rotate_value);
