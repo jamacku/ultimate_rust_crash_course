@@ -172,10 +172,18 @@ fn main() {
             invert(infile, outfile);
         },
 
-        // **OPTION**
-        // Grayscale -- see the grayscale() function below
+        // Grayscale option handler
         "grayscale" => {
-            // grayscale();
+            let (infile, outfile): (String, String);
+
+            if args.len() < 2 {
+                print_usage_and_exit();
+            }
+
+            infile = args.remove(0);
+            outfile = args.remove(0);
+
+            grayscale(infile, outfile);
         },
 
         // A VERY DIFFERENT EXAMPLE...a really fun one. :-)
@@ -278,14 +286,10 @@ fn rotate(infile: String, outfile: String, value: u32) {
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
-
+/**
+ * Function for inverting pictures
+ */
 fn invert(infile: String, outfile: String) {
-    // See blur() for an example of how to open an image.
-
-    // .invert() takes no arguments and converts the image in-place, so you
-    // will use the same image to save out to a different file.
-
-    // See blur() for an example of how to save the image.
     let mut img: image::DynamicImage;
     
     // Here's how you open an existing image file
@@ -296,13 +300,18 @@ fn invert(infile: String, outfile: String) {
     img.save(outfile).expect("Failed writing OUTFILE.");
 }
 
+/**
+ * Function for graying pictures
+ */
 fn grayscale(infile: String, outfile: String) {
-    // See blur() for an example of how to open an image.
+    let (img, img2): (image::DynamicImage, image::DynamicImage);
+    
+    // Here's how you open an existing image file
+    img = image::open(infile).expect("Failed to open INFILE.");
+    img2 = img.grayscale();
 
-    // .grayscale() takes no arguments and converts the image in-place, so
-    // you will use the same image to save out to a different file.
-
-    // See blur() for an example of how to save the image.
+    // Here's how you save an image to a file.
+    img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
 fn generate(outfile: String) {
