@@ -127,8 +127,8 @@ fn main() {
             crop(infile, outfile, crop_value);
         },
 
-        // **OPTION**
-        // Rotate -- see the rotate() function below
+        // Rotate option handler
+        // TODO: Improve options (90, 180, 270) handler
         "rotate" => {
             let (infile, outfile): (String, String);
             let rotate_value: u32;
