@@ -256,6 +256,34 @@ fn main() {
                 .required(false)
                 .default_value("2")
                 .about("Brighten value e.g. '10'.")))
+        .subcommand(App::new("crop")
+            .about("Crop feature.")
+            .arg(Arg::new("value")
+                .short('v')
+                .long("value")
+                .value_name("CROP_VALUE")
+                .takes_value(true)
+                .required(false)
+                .number_of_values(4)
+                .default_value("x: 5, y: 5, width: 5, height: 5")
+                .about("Crop value e.g. '10 10 10 10'.")))
+        .subcommand(App::new("rotate")
+            .about("Rotate feature.")
+            .arg(Arg::new("value")
+                .short('v')
+                .long("value")
+                .value_name("ROTATE_VALUE")
+                .takes_value(true)
+                .required(false)
+                .default_value("90")
+                .about("Rotate value in degrees. Option accepts only values '90', '180' and '270'.")))
+
+
+                // invert
+                // greyscale
+                // fractal
+                // generate
+
         .get_matches();
 
     /* Check HWADDR */
