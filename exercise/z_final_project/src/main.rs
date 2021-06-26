@@ -26,6 +26,10 @@
 //     let positive_number: u32 = some_string.parse().expect("Failed to parse a number");
 
 use rand::Rng;
+use clap::{
+    App,
+    Arg
+};
 
 const DEFAULT_BLUR_VALUE: f32 = 2.0;
 const DEFAULT_BRIGHTEN_VALUE: i32 = 2;
@@ -45,7 +49,7 @@ fn main() {
     // ! and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
     // TODO: use "clap" library!
     // TODO: improve cornercase error handeling + msgs
-    let mut args: Vec<String>;
+    /*let mut args: Vec<String>;
     let subcommand: String;
 
     args = std::env::args().skip(1).collect();
@@ -226,7 +230,39 @@ fn main() {
         _ => {
             print_usage_and_exit();
         },
+    }*/
+
+    let matches = App::new("mirage")
+        .version("1.0")
+        .author("Jan Macku <jamacku@redhat.com>")
+        .about("Does awesome things")
+        .subcommand(App::new("blur")
+            .about("Blur feature.")
+            .arg(Arg::new("value")
+                .short('v')
+                .long("value")
+                .value_name("BLUR_VALUE")
+                .takes_value(true)
+                .required(false)
+                .default_value("2.0")
+                .about("Blure value e.g. '10.0'.")))
+        .subcommand(App::new("brighten")
+            .about("Brighten feature.")
+            .arg(Arg::new("value")
+                .short('v')
+                .long("value")
+                .value_name("BRIGHTEN_VALUE")
+                .takes_value(true)
+                .required(false)
+                .default_value("2")
+                .about("Brighten value e.g. '10'.")))
+        .get_matches();
+
+    /* Check HWADDR */
+    if let Some(o) = matches.value_of("hwaddr") {
+        println!("Value for HWADDR: {}", o);
     }
+
 }
 
 /**
