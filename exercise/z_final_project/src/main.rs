@@ -277,13 +277,22 @@ fn main() {
                 .required(false)
                 .default_value("90")
                 .about("Rotate value in degrees. Option accepts only values '90', '180' and '270'.")))
-
-
-                // invert
-                // greyscale
-                // fractal
-                // generate
-
+        .subcommand(App::new("invert")
+            .about("Invert feature."))
+        .subcommand(App::new("greyscale")
+            .about("Greyscale feature."))
+        .subcommand(App::new("fractal")
+            .about("Fractal feature."))
+        .subcommand(App::new("generate")
+            .about("Generate feature.")
+            .arg(Arg::new("value")
+                .short('v')
+                .long("value")
+                .value_name("Generate_VALUE")
+                .takes_value(true)
+                .required(false)
+                .default_value("10")
+                .about("Generate value.")))
         .get_matches();
 
     /* Check HWADDR */
